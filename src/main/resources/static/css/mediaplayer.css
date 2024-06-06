@@ -1,0 +1,154 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: black; /* Set background color to black */
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px); /* Apply blur effect */
+}
+
+.song-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.song-info img {
+    width: 300px; /* Adjust image width as needed */
+    height: auto;
+    border-radius: 10px;
+}
+
+.song-info h2 {
+    font-size: 24px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: white;
+}
+
+.song-info h1 {
+    font-size: 18px;
+    color: white;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.controls button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+    margin: 0 10px;
+    transition: transform 0.3s ease;
+}
+
+.controls button:hover {
+    transform: scale(1.1); /* Zoom in effect on hover */
+}
+
+.progress-bar {
+    width: 300px; /* Adjust width as needed */
+    height: 5px; /* Adjust height as needed */
+    background-color: transparent; /* Set background color to transparent */
+    margin-bottom: 20px;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid white; /* Add a thin white border */
+}
+
+
+.progress {
+    width: 0%; /* Initial progress percentage */
+    height: 100%;
+    background-color: white;
+    transition: width 0.1s ease;
+}
+
+.additional-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.additional-controls button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+    margin: 0 10px;
+    transition: transform 0.3s ease;
+}
+
+.additional-controls button:hover {
+    transform: scale(1.1); /* Zoom in effect on hover */
+}
+
+.volume-slider-container {
+    display: none;
+    margin: 0 10px;
+}
+
+.volume-slider {
+    width: 100px; /* Adjust width as needed */
+    -webkit-appearance: none;
+    height: 5px;
+    border-radius: 5px;
+    background-color: white;
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+}
+
+.show {
+    display: block;
+}
+
+.additional-controls .loop.active {
+    color: #3a3838; /* Change the color to indicate loop mode */
+}
+
+/* Add zoom-out animation */
+.song-info img.zoom-out {
+    animation: zoom-out 0.5s ease;
+}
+
+@keyframes zoom-out {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.5);
+    }
+}

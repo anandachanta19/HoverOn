@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <input type="hidden" id="csrfToken" name="_csrf" value="${_csrf.token}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoverOn - Home</title>
+    <link rel="stylesheet" href="/css/home.css">
+    <!-- Font Awesome for menu icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="menu-wrapper">
+            <div class="menu-icon" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="menu-overlay" id="menuOverlay">
+                <div class="menu-content">
+                    <div class="menu-item" onclick="navigateBack()">
+                        <i class="fas fa-chevron-left"></i>
+                        <p>Back</p>
+                    </div>
+                    <div class="menu-item" onclick="openOverlay('profileOverlay')">
+                        <i class="fas fa-user"></i>
+                        <p>Profile</p>
+                    </div>
+                    <div class="menu-item" onclick="openOverlay('createPlaylistOverlay')">
+                        <i class="fas fa-list"></i>
+                        <p>Create Playlists</p>
+                    </div>
+                    <!-- Existing menu items -->
+                    <div class="menu-item" onclick="openOverlay('updateProfileOverlay')">
+                        <i class="fas fa-user-edit"></i>
+                        <p>Update Profile</p>
+                    </div>
+
+                    <div class="menu-item" onclick="openOverlay('aboutOverlay')">
+                        <i class="fas fa-info-circle"></i>
+                        <p>About</p>
+                    </div>
+                    <div class="menu-item" onclick="confirmLogout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <p>Logout</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Overlay -->
+            <div id="profileOverlay" class="overlay">
+                <div class="overlay-content">
+                    <h3>Profile</h3>
+                    <!-- Add profile information here -->
+                    <button onclick="closeOverlay('profileOverlay')">Back</button>
+                </div>
+            </div>
+
+            <!-- Create Playlist Overlay -->
+            <div id="createPlaylistOverlay" class="overlay">
+                <div class="overlay-content">
+                    <h3>Create Playlist</h3>
+                    <input type="text" id="playlistNameInput" placeholder="Enter playlist name">
+                    <button onclick="createPlaylist()">Create</button>
+                    <button onclick="closeOverlay('createPlaylistOverlay')">Back</button>
+                </div>
+            </div>
+
+            <!-- Update Profile Overlay -->
+            <div id="updateProfileOverlay" class="overlay">
+                <div class="overlay-content">
+                    <h3>Update Profile</h3>
+                    <form id="profileUpdateForm">
+                        <!-- Profile update fields -->
+                        <input type="text" id="usernameInput" placeholder="Username" th:value="${user.userName}">
+                        <input type="email" id="emailInput" placeholder="Email" th:value="${user.email}">
+                        <!-- Gender selection dropdown -->
+                        <select id="genderInput" required>
+                            <option value="male" th:selected="${user.gender == 'male'}">Male</option>
+                            <option value="female" th:selected="${user.gender == 'female'}">Female</option>
+                            <option value="other" th:selected="${user.gender == 'other'}">Other</option>
+                        </select>
+                        <input type="number" id="ageInput" placeholder="Age" th:value="${user.age}">
+                        <button type="button" onclick="updateProfile()">Update</button>
+                    </form>
+                    <button onclick="openOverlay('changePasswordOverlay')">Change Password</button>
+                    <button onclick="closeOverlay('updateProfileOverlay')">Back</button>
+                </div>
+            </div>
+
+            <!-- Change Password Overlay -->
+            <div id="changePasswordOverlay" class="overlay">
+                <div class="overlay-content">
+                    <h3>Change Password</h3>
+                    <form id="passwordUpdateForm">
+                        <input type="password" id="oldPasswordInput" placeholder="Old Password" required>
+                        <input type="password" id="newPasswordInput" placeholder="New Password" required>
+                        <input type="password" id="confirmNewPasswordInput" placeholder="Confirm New Password" required>
+                        <button type="button" onclick="updatePassword()">Update Password</button>
+                    </form>
+                    <button onclick="closeOverlay('changePasswordOverlay')">Back</button>
+                </div>
+            </div>
+
+            <!-- About Overlay -->
+            <div id="aboutOverlay" class="overlay">
+                <div class="overlay-content">
+                    <h3>About</h3>
+                    <p>This is our CS240 DBMS Project</p>
+                    <p>Team Members:</p>
+                    <p>Anand - 2201009</p>
+                    <p>Vishnu - 2201078</p>
+                    <p>Prudhvi - 2201080</p>
+                    <p>Pranitha - 2201082</p>
+                    <button onclick="closeOverlay('aboutOverlay')">Back</button>
+                </div>
+            </div>
+        </div>
+        <div class="title">
+            <h1>HoverOn</h1>
+        </div>
+        <!-- Removed search input -->
+        <div class="search-icon">
+            <a th:href="@{/hoveron/search}">
+                <i class="fa fa-search" style="color: white;"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="greeting">
+        <h1>Hi There!</h1>
+    </div>
+    <div class="all-songs">
+        <h2>All Songs</h2>
+        <div class="song-list">
+            <!-- Songs will be populated here -->
+        </div>
+    </div>
+
+    <div class="playlists">
+        <h2>Your Playlists</h2>
+        <div class="playlist-icons">
+            <div th:each="playlist : ${playlists}" class="playlist">
+                <p th:text="${playlist.name}">Playlist Name</p>
+                <button th:onclick="'window.location.href=\'/hoveron/playlist/' + ${playlist.id} + '\''">Open</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Playlist Songs Overlay -->
+    <div id="playlistOverlay" class="overlay">
+        <div class="overlay-content">
+            <h3 th:text="${playlistName}">Playlist Name</h3>
+            <div class="song-list" th:if="${not #lists.isEmpty(songs)}">
+                <div th:each="song : ${songs}" class="song">
+                    <img th:src="@{'/img/' + ${song.songName} + '.jpg'}" th:alt="${song.songName}" />
+                    <p th:text="${song.songName}"><b>Song Name</b></p>
+                    <button th:onclick="'playSong(' + ${song.songId} + ')'">Play</button>
+                    <button th:onclick="'removeSong(' + ${song.songId} + ',' + ${playlistId} + ')'">Remove</button>
+                </div>
+            </div>
+            <button onclick="closeOverlay('playlistOverlay')">Close</button>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var userId = [[${user.userId}]];
+    /*]]>*/
+</script>
+<script src="/js/home.js"></script>
+</body>
+</html>

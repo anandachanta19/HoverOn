@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoverOn - Login</title>
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1 class="title">HoverOn</h1>
+    </div>
+    <div class="form-container">
+        <h2>Login</h2>
+        <div th:if="${error}" class="alert">
+            <p th:text="${error}"></p>
+        </div>
+        <form id="loginForm" action="/hoveron/login" method="POST" th:object="${loginDto}">
+            <div class="input-group">
+                <label for="username" class="white-text">Username:</label>
+                <input type="text" id="userName" name="userName" th:field="*{userName}" required>
+            </div>
+            <div class="input-group">
+                <label for="password" class="white-text">Password:</label>
+                <input type="password" id="password" name="password" th:field="*{password}" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a th:href="@{/signup}">Sign up</a></p>
+    </div>
+</div>
+</body>
+</html>

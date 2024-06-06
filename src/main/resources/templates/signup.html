@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoverOn - Sign Up</title>
+    <link rel="stylesheet" type="text/css" href="/css/signup.css">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1 class="title">HoverOn</h1>
+    </div>
+    <div class="form-container">
+        <h2>Sign Up</h2>
+        <form id="signupForm" action="/processSignup" method="POST" th:object="${user}">
+            <div class="input-group">
+                <label for="email" class="white-text">Email:</label>
+                <input type="email" id="email" name="email" th:field="*{email}" required>
+            </div>
+            <div class="input-group">
+                <label for="userName" class="white-text">Username:</label>
+                <input type="text" id="userName" name="userName" th:field="*{userName}" required>
+            </div>
+            <div class="input-group">
+                <label for="password" class="white-text">Password:</label>
+                <input type="password" id="password" name="password" th:field="*{password}" required>
+            </div>
+            <div class="input-group">
+                <label for="gender" class="white-text">Gender:</label>
+                <select id="gender" name="gender" th:field="*{gender}" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="age" class="white-text">Age:</label>
+                <input type="number" id="age" name="age" th:field="*{age}" min="18" required>
+            </div>
+            <button type="submit" onclick="submitForm()">Sign Up</button>
+        </form>
+        <p>Already have an account? <a th:href="@{/hoveron/login}">Login</a></p>
+    </div>
+</div>
+
+<script>
+    function submitForm() {
+        const formData = {
+            email: document.getElementById("email").value,
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value,
+            gender: document.getElementById("gender").value,
+            age: document.getElementById("age").value
+        };
+
+        // Convert form data to JSON string
+        const jsonData = JSON.stringify(formData);
+
+        // Send POST request to server
+        fetch('/api/auth/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: jsonData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                // Handle successful response (e.g., redirect user)
+                window.location.href = '/login'; // Redirect to login page
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error (e.g., display error message to user)
+                alert('Failed to sign up. Please try again.');
+            });
+    }
+</script>
+</body>
+</html>

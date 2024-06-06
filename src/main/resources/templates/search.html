@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <link rel="stylesheet" th:href="@{/css/search.css}">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Hoveron Music Search</h1>
+            <a th:href="@{/hoveron/home/{userId}(userId=${userId})}" class="back-button">Back</a>
+            <div class="search-icon">
+                <a th:href="@{/hoveron/search}">
+                    <i class="fa fa-search" style="color: white;"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <div class="form-container">
+            <h2>What Do You Wanna Listen?</h2>
+            <div class="search-container">
+                <label for="searchInput"></label><input type="text" id="searchInput" placeholder="Search...">
+                <button id="searchButton">Search</button>
+            </div>
+        </div>
+
+        <div id="searchResults">
+            <div th:if="${searchResult != null and searchResult.songs != null and searchResult.songs.size() > 0}" class="song-container">
+                <!-- The song items will be displayed here as per the CSS styles -->
+                <div th:each="song : ${searchResult.songs}" class="song-item">
+                    <img th:src="@{/img/{songName}.jpg(songName=${song.songName})}" th:alt="${song.songName}">
+                    <p th:text="${song.songName}"></p>
+                    <a th:href="@{/mediaplayer/{songId}(songId=${song.songId})}" class="play-button">Play</a>
+                    <button class="add-to-playlist-button" th:onclick="'openPlaylistOverlay(' + ${song.songId} + ')'">Add to Playlist</button>
+                </div>
+            </div>
+            <div th:if="${searchResult == null or searchResult.songs == null or searchResult.songs.size() == 0}">
+                <p>No results found</p>
+            </div>
+        </div>
+
+        <!-- Playlist Overlay -->
+        <div id="playlistOverlay" class="overlay" style="display: none;">
+            <div class="overlay-content">
+                <h3>Add to Playlist</h3>
+                <div class="playlist-list">
+                            <li th:each="playlist : ${playlists}" class="playlist-item">
+                                <span th:text="${playlist.playlistName}"></span>
+                                <button th:attr="onclick='addSongToPlaylist(' + ${song.id} + ',' + ${playlist.playlistId} + ')'">Add</button>
+                            </li>
+                    </div>
+                <button class="close-button" onclick="closeOverlay('playlistOverlay')">Close</button>
+            </div>
+        </div>
+    </div>
+</main>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var userId = [[${userId}]];
+    /*]]>*/
+</script>
+
+<script th:src="@{/js/search.js}"></script>
+</body>
+</html>
