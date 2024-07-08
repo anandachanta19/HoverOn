@@ -319,6 +319,7 @@ body {
     box-sizing: border-box;
 }
 
+
 .overlay button {
     padding: 10px 20px;
     background-color: rgba(0, 0, 0, 0.67); /* Dark gray background */
